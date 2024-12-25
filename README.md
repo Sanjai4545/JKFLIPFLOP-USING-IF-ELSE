@@ -45,21 +45,21 @@ The maximum possible groupings of adjacent ones are already shown in the figure.
 **PROGRAM**
 
 
-module jkff_gate(q,qbar,clk,j,k);
-
-input j,k,clk;
-output q,qbar;
-
-wire nand1_out; // output from nand1
-wire nand2_out; // output from nand2
-
-nand(nand1_out, j,clk,qbar);
-nand(nand2_out, k,clk,q);
-nand(q,qbar,nand1_out);
-nand(qbar,q,nand2_out);
-
-endmodule
-
+module jk_ff (j, k, clk, rst, q);
+  input j, k, clk, rst;
+  output reg q;
+  always @(posedge clk or posedge rst) begin
+    if (rst)
+      q <= 0; // Reset the flip-flop
+    else if (j == 0 && k == 0)
+      q <= q; // No change
+    else if (j == 0 && k == 1)
+      q <= 0; // Reset
+    else if (j == 1 && k == 0)
+      q <= 1; // Set
+    else if (j == 1 && k == 1)
+      q <= ~q; // Toggle
+  end
 
 **RTL LOGIC FOR FLIPFLOPS**
 
